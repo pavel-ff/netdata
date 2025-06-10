@@ -1,0 +1,19 @@
+---
+# Add Docker repository
+#
+- name: Add Docker GPG key
+  ansible.builtin.rpm_key:
+    key: https://download.docker.com/linux/centos/gpg
+    state: present
+
+- name: Adding docker-ce repo
+  ansible.builtin.get_url:
+    url: https://download.docker.com/linux/centos/docker-ce.repo
+    dest: /etc/yum.repos.d/docker-ce.repo
+
+- name: Set docker-ce repo permissions
+  ansible.builtin.file:
+    path: /etc/yum.repos.d/docker-ce.repo
+    owner: root
+    group: root
+    mode: '0644'

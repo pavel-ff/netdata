@@ -1,0 +1,9 @@
+---
+# tasks file for os-configure
+#
+#  Import tasks for the role in order
+- import_tasks: disable-selinux.yml
+- import_tasks: disable-firewall.yml
+- import_tasks: chrony-configure.yml
+- import_tasks: add-docker-repo.yml
+- import_tasks: docker-install.yml
