@@ -1,0 +1,47 @@
+---
+# Install netdata container
+#
+
+- name: Pull netdata image
+  community.docker.docker_image_pull:
+    name: netdata/netdata:stable
+    pull: "not_present"
+    platform: amd64
+
+- name: Create volume netdatacache
+  community.docker.docker_volume:
+    name: netdatacache
+
+- name: Create volume netdataconfig
+  community.docker.docker_volume:
+    name: netdataconfig
+
+- name: Create volume netdatalib
+  community.docker.docker_volume:
+    name: netdatalib
+
+
+- name: Start container, connect to network and link
+  community.docker.docker_container:
+    name: netdata
+    image: netdata/netdata:stable
+    restart_policy: "unless-stopped"
+    network_mode: host
+    pid_mode: host
+    capabilities:
+      - SYS_ADMIN
+      - SYS_PTRACE
+    volumes:
+      - netdataconfig:/etc/netdata
+      - netdatalib:/var/lib/netdata
+      - netdatacache:/var/cache/netdata
+      - /:/host/root:ro,rslave
+      - /etc/passwd:/host/etc/passwd:ro
+      - /etc/group:/host/etc/group:ro
+      - /etc/localtime:/etc/localtime:ro
+      - /proc:/host/proc:ro
+      - /sys:/host/sys:ro
+      - /etc/os-release:/host/etc/os-release:ro
+      - /var/log:/host/var/log:ro
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+
