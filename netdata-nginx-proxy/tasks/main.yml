@@ -1,2 +1,25 @@
 ---
 # tasks file for netdata-nginx-proxy
+#
+- name: update
+  dnf:
+    update_cache: yes
+
+- name: Install nginx
+  dnf:
+    name: nginx
+    state: latest
+
+- name: Replace nginx.conf
+  template:
+    src: nginx.conf
+    dest: /etc/nginx/nginx.conf
+    owner: root
+    group: root
+    mode: '0644'
+
+- name: Restart nginx
+  service:
+    name: nginx
+    state: restarted
+
